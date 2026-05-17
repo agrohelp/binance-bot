@@ -1,25 +1,16 @@
-import time
 from binance_api import BinanceAPI
 from strategy import Strategy
+import time
 
 api = BinanceAPI()
-strategy = Strategy(api)
+strategy = Strategy()
 
-def run():
-    while True:
-        data = api.price("BTCUSDT")
-        price = float(data["price"])
-        print(f"Cena BTC: {price}")
+while True:
+    data = api.get_price("XRPUSDC")
+    price = float(data["price"])
 
-        if strategy.should_buy(price):
-            print("Kupuję...")
-            print(api.order_market_buy("BTCUSDT", 0.001))
+    signal = strategy.analyze(price)
 
-        if strategy.should_sell(price):
-            print("Sprzedaję...")
-            print(api.order_market_sell("BTCUSDT", 0.001))
+    print(f"Cena: {price} → Sygnał: {signal}")
 
-        time.sleep(3)
-
-if __name__ == "__main__":
-    run()
+    time.sleep(2)

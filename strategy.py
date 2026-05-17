@@ -1,12 +1,18 @@
 class Strategy:
-    def __init__(self, api, symbol="BTCUSDT"):
-        self.api = api
-        self.symbol = symbol
+    def __init__(self):
+        self.last_price = None
 
-    def should_buy(self, price):
-        # PRZYKŁAD: kup jeśli cena < 60k
-        return float(price) < 60000
+    def analyze(self, price):
+        if self.last_price is None:
+            self.last_price = price
+            return "WAIT"
 
-    def should_sell(self, price):
-        # PRZYKŁAD: sprzedaj jeśli cena > 70k
-        return float(price) > 70000
+        if price > self.last_price:
+            signal = "BUY (symulacja)"
+        elif price < self.last_price:
+            signal = "SELL (symulacja)"
+        else:
+            signal = "WAIT"
+
+        self.last_price = price
+        return signal

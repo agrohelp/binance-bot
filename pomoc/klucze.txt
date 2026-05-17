@@ -1,0 +1,17 @@
+Klucze 'tylko do odczytu' zawiera plik .env
+🔵 To oznacza, że Twoje klucze NIE są bezużyteczne
+One są po prostu niepotrzebne do testów publicznych danych.
+Twoje klucze READ‑ONLY przydadzą się, gdy będziesz chciał:
+✔ pobierać saldo konta
+/api/v3/account → wymaga klucza (READ)
+✔ pobierać historię zleceń
+/api/v3/allOrders → wymaga klucza (READ)
+✔ pobierać informacje o subkontach
+/sapi/v1/sub-account → wymaga klucza (READ)
+
+Ale do:
+cen
+świec
+order book
+danych rynkowych
+klucz nie jest potrzebny.

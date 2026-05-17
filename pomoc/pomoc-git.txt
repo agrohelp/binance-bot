@@ -1,2 +1,37 @@
+-configuracja globalna git
+git config --global user.name "Karol"
+git config --global user.email "szew.karol@gmail.com"
+--
+-Inicjacja git w projekcie
 cd C:/binance_bot
 git init
+--
+- pierwszy commit
+git add .
+git commit -m "Początkowy szkielet bota Binance"
+--
+- sprawdz czy działa
+git config --list
+
+--GitHub
+-repozytorjum
+https://github.com/agrohelp/binance-bot
+
+--polącz lokalne repo z GitHub
+git remote add origin https://github.com/agrohelp/binance-bot.git
+- sprawdz czy remote (zdalny) działa 
+remote -v
+
+-git branch → operacje na gałęziach -M → move/rename z wymuszeniem -main → nowa nazwa gałęzi
+git branch -M main
+
+-wyslij do GitHub
+git push -u origin main
+
+--Pierwszy commit po zmianach
+git add .
+git commit -m "Dodano obsługę .env i bezpieczną konfigurację"
+git push
+
+
+
