@@ -33,5 +33,35 @@ git add .
 git commit -m "Dodano obsługę .env i bezpieczną konfigurację"
 git push
 
+--Po zmianach
+--sprawdz zmiany w plikach
+git status
+-- zmiany są więc:
+-1)dodaj wszystkie zmiany
+git add .
+-2) Zrób commit
+git commit -m "Kod dostosowany do klucza 'tylko odczyt'"
+3) Wyślij zmiany na GitHub
+git push
+
+-- commit historia opis data i godzina commita
+git log
+git log --oneline  - ostatni
+git log --oneline --graph
+git log -n 5   - ostatnie 5
+git log -- main.py  - dla jednego pliku
+git log --author="Karol"   - autora
+git log --grep="read-only"   - zawierajace słowo
+git log -p   - pokazuje zmiany - bardzo obszerny nie stosuj
+git log --name-only  - tylko zmienione pliki
+git log --stat   - statystyki zmian
+
+
+
+
+
+
+
+
 
 

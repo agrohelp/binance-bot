@@ -1,0 +1,80 @@
+========================================
+ GIT LOG — BASIC CHEAT‑SHEET (Karol)
+========================================
+
+1. NAJWAŻNIEJSZE 3 KOMENDY (90% UŻYCIA)
+----------------------------------------
+git log --oneline
+git log --oneline --graph
+git log -p
+
+
+2. SZYBKI PRZEGLĄD HISTORII
+----------------------------------------
+git log --oneline
+• 1 commit = 1 linia
+• szybki podgląd zmian
+
+
+3. DRZEWO COMMITÓW (GAŁĘZIE, MERGE)
+----------------------------------------
+git log --oneline --graph
+• ASCII‑graf
+• widoczna struktura projektu
+
+
+4. OSTATNIE N COMMITÓW
+----------------------------------------
+git log -n 10
+• pokazuje ostatnie 10 commitów
+
+
+5. HISTORIA JEDNEGO PLIKU
+----------------------------------------
+git log -- main.py
+• śledzenie zmian konkretnego pliku
+
+
+6. ZMIANY W COMMITACH (DIFF)
+----------------------------------------
+git log -p
+• pokazuje dokładnie, co zmieniłeś
+
+
+7. STATYSTYKI ZMIAN
+----------------------------------------
+git log --stat
+• ile linii dodano/usunięto
+• które pliki zmienione
+
+
+8. FILTROWANIE PO AUTORZE
+----------------------------------------
+git log --author="Karol"
+
+
+9. SZUKANIE COMMITÓW PO SŁOWIE
+----------------------------------------
+git log --grep="read-only"
+
+
+10. ZAKRES DAT
+----------------------------------------
+git log --since="2024-01-01" --until="2024-12-31"
+
+
+11. FORMAT NIETYPOWY (CZYTELNY)
+----------------------------------------
+git log --pretty=format:"%h %ad | %s" --date=short
+• %h — skrót commit ID
+• %ad — data
+• %s — opis
+
+
+12. ULTRA‑BASIC (DO ZAPAMIĘTANIA)
+----------------------------------------
+git log --oneline
+git log --oneline --graph
+git log -p
+
+========================================

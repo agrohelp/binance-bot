@@ -1,16 +1,12 @@
-from binance_api import BinanceAPI
-from strategy import Strategy
+from strategy_ema import StrategyEMA, get_klines_15m
 import time
 
-api = BinanceAPI()
-strategy = Strategy()
+strategy = StrategyEMA()
 
 while True:
-    data = api.get_price("XRPUSDC")
-    price = float(data["price"])
+    prices = get_klines_15m("BTCUSDT", 100)
+    signal = strategy.analyze(prices)
 
-    signal = strategy.analyze(price)
+    print("Sygnał:", signal)
 
-    print(f"Cena: {price} → Sygnał: {signal}")
-
-    time.sleep(2)
+    time.sleep(60)
