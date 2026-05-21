@@ -1,0 +1,82 @@
+# ============================================================
+#   PROCEDURA AKTUALIZACJI PLIKÓW PROJEKTU binance_bot
+#   (po zmianach na laptopie)
+#   Orange Pi / Linux / Armbian
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. SKOPIOWANIE NOWEGO PLIKU NA ORANGE PI
+# ------------------------------------------------------------
+# Z laptopa wysyłasz zmieniony plik do katalogu projektu:
+
+scp main.py karol@opi3-bot:/binance-bot/
+
+# Lub cały folder projektu:
+scp -r binance-bot/ karol@opi3-bot:/binance-bot/
+
+
+# ------------------------------------------------------------
+# 2. SPRAWDZENIE, CZY PLIK SIĘ PODMIENIŁ (opcjonalnie)
+# ------------------------------------------------------------
+
+ls -l /binance-bot
+
+
+# ------------------------------------------------------------
+# 3. RESTART USŁUGI SYSTEMD (najważniejsze)
+# ------------------------------------------------------------
+# Po podmianie plików bot MUSI zostać zrestartowany,
+# aby zaczął działać z nową wersją kodu.
+
+sudo systemctl restart binance_bot.service
+
+
+# ------------------------------------------------------------
+# 4. PODGLĄD LOGÓW, ABY UPEWNIĆ SIĘ, ŻE BOT DZIAŁA
+# ------------------------------------------------------------
+
+sudo journalctl -u binance_bot.service -f
+
+# Jeśli widzisz sygnały EMA lub logi startowe — działa OK.
+
+
+# ------------------------------------------------------------
+# 5. JEŚLI ZMIENIŁEŚ ZALEŻNOŚCI (requirements.txt)
+# ------------------------------------------------------------
+# Wtedy musisz zaktualizować pakiety w venv:
+
+cd /binance-bot
+venv/bin/python -m pip install -r requirements.txt
+
+# I ponownie restart usługi:
+sudo systemctl restart binance_bot.service
+
+
+# ------------------------------------------------------------
+# 6. JEŚLI ZMIENIŁEŚ PLIK .service
+# ------------------------------------------------------------
+# Po każdej zmianie pliku usługi wykonaj:
+
+sudo systemctl daemon-reload
+sudo systemctl restart binance_bot.service
+
+
+# ------------------------------------------------------------
+# 7. SZYBKIE SPRAWDZENIE STATUSU
+# ------------------------------------------------------------
+
+systemctl status binance_bot.service
+
+
+# ============================================================
+#   PODSUMOWANIE:
+#
+#   • Po podmianie plików → restart usługi = NOWA WERSJA DZIAŁA
+#   • Jeśli zmienisz zależności → pip install + restart
+#   • Jeśli zmienisz plik .service → daemon-reload + restart
+#
+#   Najczęściej używane:
+#       sudo systemctl restart binance_bot.service
+#       sudo journalctl -u binance_bot.service -f
+# ============================================================

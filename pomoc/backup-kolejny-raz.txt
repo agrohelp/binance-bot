@@ -1,0 +1,98 @@
+# ============================================================
+#   PROCEDURA BACKUPÓW SSD — NADPISYWANIE I SNAPSHOTY
+#   Orange Pi / Linux / Armbian
+#   Autor: Karol (Twoja konfiguracja)
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. SPRAWDZENIE DYSKÓW (przed każdym backupem)
+# ------------------------------------------------------------
+
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
+
+# Przykład:
+# sda   120G  disk   /        <-- główny SSD (system)
+# sdb   240G  disk            <-- drugi SSD (backup)
+
+
+# ------------------------------------------------------------
+# 2. BACKUP PEŁNEGO SYSTEMU (klon 1:1)
+# ------------------------------------------------------------
+# UWAGA: TA OPERACJA NADPISUJE CAŁY DYSK BACKUP (sdb)
+# Każdy kolejny backup = pełne nadpisanie poprzedniego.
+
+sudo dd if=/dev/sda of=/dev/sdb bs=64M status=progress
+
+# Po zakończeniu masz świeży klon systemu.
+
+
+# ------------------------------------------------------------
+# 3. BACKUP PROJEKTÓW (rsync)
+# ------------------------------------------------------------
+# UWAGA: rsync NADPISUJE tylko zmienione pliki.
+# Nie usuwa niczego, co nie istnieje w źródle.
+# Idealne do codziennych backupów.
+
+sudo rsync -av /binance-bot /mnt/backup/
+sudo rsync -av /etc/systemd/system/binance_bot.service /mnt/backup/
+sudo rsync -av /home/karol /mnt/backup/
+
+
+# ------------------------------------------------------------
+# 4. BACKUP Z DATĄ (SNAPSHOTY — nic się nie nadpisuje)
+# ------------------------------------------------------------
+# Każdy backup trafia do osobnego katalogu.
+# Najbezpieczniejsza metoda, jeśli chcesz historię backupów.
+
+sudo rsync -av /binance-bot /mnt/backup/binance-bot-$(date +%Y-%m-%d)/
+sudo rsync -av /home/karol /mnt/backup/home-karol-$(date +%Y-%m-%d)/
+
+# Przykład katalogów:
+# /mnt/backup/binance-bot-2026-05-20
+# /mnt/backup/binance-bot-2026-06-01
+# /mnt/backup/binance-bot-2026-06-15
+
+
+# ------------------------------------------------------------
+# 5. AUTOMATYCZNY BACKUP CODZIENNY (cron)
+# ------------------------------------------------------------
+
+sudo crontab -e
+
+# Dodaj:
+0 3 * * * rsync -av /binance-bot /mnt/backup/
+
+
+# ------------------------------------------------------------
+# 6. MONTOWANIE I ODMONTOWANIE DYSKU BACKUP
+# ------------------------------------------------------------
+
+sudo mkdir -p /mnt/backup
+sudo mount /dev/sdb1 /mnt/backup
+
+# Po backupie:
+sudo umount /mnt/backup
+
+
+# ------------------------------------------------------------
+# 7. SZYBKIE SPRAWDZENIE POPRAWNOŚCI BACKUPU
+# ------------------------------------------------------------
+
+ls -l /mnt/backup
+df -h
+sudo journalctl -xe   # jeśli coś poszło nie tak
+
+
+# ============================================================
+#   PODSUMOWANIE:
+#
+#   • dd → NADPISUJE cały dysk backup (pełny klon systemu)
+#   • rsync → NADPISUJE tylko zmienione pliki (bezpieczne)
+#   • rsync + data → NIC nie nadpisuje (snapshoty)
+#
+#   Najlepszy zestaw:
+#   - raz na jakiś czas: dd (pełny klon)
+#   - codziennie: rsync (projekty)
+#   - co tydzień: snapshot z datą
+# ============================================================

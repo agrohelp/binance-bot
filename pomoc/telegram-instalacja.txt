@@ -1,0 +1,76 @@
+# ============================================================
+#   TELEGRAM — INSTALACJA I KONFIGURACJA OD ZERA
+#   (telefon + komputer)
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. INSTALACJA NA TELEFONIE (Android / iPhone)
+# ------------------------------------------------------------
+
+# Android:
+#   Otwórz Google Play → wpisz "Telegram" → zainstaluj.
+
+# iPhone:
+#   App Store → wpisz "Telegram" → zainstaluj.
+
+# Po instalacji:
+#   • uruchom aplikację
+#   • podaj numer telefonu
+#   • wpisz kod SMS
+#   • ustaw nazwę (może być "Karol")
+
+
+# ------------------------------------------------------------
+# 2. INSTALACJA NA KOMPUTERZE (opcjonalnie)
+# ------------------------------------------------------------
+
+# Wejdź na:
+#   https://desktop.telegram.org/
+
+# Pobierz wersję:
+#   • Windows
+#   • Linux
+#   • Mac
+
+# Po uruchomieniu:
+#   • kliknij "Start Messaging"
+#   • zeskanuj kod QR telefonem (Telegram → Ustawienia → Urządzenia → Połącz urządzenie)
+
+
+# ------------------------------------------------------------
+# 3. SPRAWDZENIE, CZY TELEGRAM DZIAŁA
+# ------------------------------------------------------------
+
+# Wyszukaj w aplikacji:
+#   "Telegram" (oficjalny kanał)
+#   "Telegram Tips"
+
+# Jeśli możesz otworzyć — działa poprawnie.
+
+
+# ------------------------------------------------------------
+# 4. PRZYGOTOWANIE DO TWORZENIA BOTA (kolejny etap)
+# ------------------------------------------------------------
+
+# Wyszukaj kontakt:
+#   BotFather
+
+# To jest oficjalny bot Telegrama do tworzenia botów.
+
+# Ale NIE twórz jeszcze bota — zrobimy to w kolejnym pliku,
+# żeby zachować porządek i pełną kontrolę nad konfiguracją.
+
+
+# ============================================================
+#   PODSUMOWANIE:
+#
+#   • Telegram zainstalowany na telefonie
+#   • Telegram opcjonalnie na komputerze
+#   • Konto aktywne i gotowe
+#   • BotFather znaleziony, ale jeszcze nie używany
+#
+#   Następny krok:
+#       UTWORZENIE WŁASNEGO BOTA TELEGRAM
+#       (token, chat_id, test wiadomości)
+# ============================================================

@@ -1,0 +1,33 @@
+--system https://armbian.tnahosting.net/archive/orangepizero3/archive
+
+Uruchamianie:
+cd /mnt/dysk2T/binance-bot
+source venv/bin/activate
+python main.py
+---
+Ten: Opios-arch-aarch64-xfce-opizero3-24.07-linux6.1.31.img.xz    
+-zainstalowałem na opi3-bot ip 192.168.1.27
+Używaj do wgrania wyłącznie programu REFUS nie BalenaEtcher - ten psuje
+Po włozeniu karty SD nic nie formatuj, tylko REFUS i wgrywaj
+---
+--192.168.1.1 livebox, zobaczysz
+30:38:e0:76:f0:9d	192.168.1.27	infinity	opi3-bot LAN4
+-- Nagrywałe programem RUFUS - zalecam, bo BalenaEtcher coś psuje
+karol,   1111
+----
+Dysk SSD 128 GB dołączony do Opi3 ma UUID: abe95642-61d6-468d-94ed-2fa2aea5c387
+--
+Jeśli chcesz zobaczyć, co bot robi w tle
+sudo journalctl -u binance_bot.service -f
+
+Jeśli chcesz zatrzymać bota
+sudo systemctl stop binance_bot.service
+
+Jeśli chcesz go uruchomić ponownie
+Kod
+sudo systemctl restart binance_bot.service
+
+Jeśli chcesz sprawdzić status
+Kod
+sudo systemctl status binance_bot.service
+

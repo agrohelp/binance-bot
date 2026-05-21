@@ -1,0 +1,72 @@
+# ============================================================
+#   POBRANIE chat_id DLA TWOJEGO BOTA TELEGRAM
+#   (potrzebne, aby bot wysyłał alerty BUY/SELL)
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. NAPISZ WIADOMOŚĆ DO SWOJEGO BOTA
+# ------------------------------------------------------------
+# Otwórz Telegram → Twój bot → kliknij START
+# Napisz do niego dowolną wiadomość, np.:
+
+test
+
+# To jest konieczne, aby bot "zobaczył" Twój czat.
+
+
+# ------------------------------------------------------------
+# 2. ODCZYTAJ chat_id PRZEZ API Telegrama
+# ------------------------------------------------------------
+# W przeglądarce otwórz:
+
+https://api.telegram.org/botTOKEN/getUpdates
+
+# UWAGA:
+#   ZAMIENIASZ "TOKEN" na swój prawdziwy token z BotFather.
+#   Przykład:
+#   https://api.telegram.org/bot123456789:ABCdef/getUpdates
+
+
+# ------------------------------------------------------------
+# 3. ZNAJDŹ chat_id W ODPOWIEDZI
+# ------------------------------------------------------------
+# W odpowiedzi zobaczysz coś takiego:
+
+{
+  "message": {
+    "chat": {
+      "id": 123456789,
+      "first_name": "Karol",
+      "type": "private"
+    },
+    "text": "test"
+  }
+}
+
+# chat.id = TO JEST TWOJE chat_id
+# W tym przykładzie:
+#   123456789
+
+
+# ------------------------------------------------------------
+# 4. ZAPISZ chat_id
+# ------------------------------------------------------------
+# Będzie potrzebny w pliku:
+#   telegram_config.py
+
+# Przykład:
+#   CHAT_ID = 123456789
+
+
+# ============================================================
+#   PODSUMOWANIE:
+#
+#   ✔ Wysłałeś wiadomość do swojego bota
+#   ✔ Otworzyłeś getUpdates
+#   ✔ Odczytałeś chat_id
+#   ✔ Jesteś gotowy na integrację z Pythonem
+#
+#   Następny krok:
+#       4. Moduł telegram_alerts.py (wysyłanie alertów)
+# ============================================================

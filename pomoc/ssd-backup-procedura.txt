@@ -1,0 +1,112 @@
+# ================================================
+#   PODŁĄCZENIE DRUGIEGO SSD + BACKUP SYSTEMU
+#   Orange Pi / Linux / Armbian
+#   Autor: Karol (Twoja konfiguracja)
+# ================================================
+
+
+# --------------------------------
+# 1. SPRAWDZENIE PODŁĄCZONYCH DYSKÓW
+# --------------------------------
+# Po podłączeniu drugiego SSD sprawdź, jak system go widzi:
+
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
+
+# Przykład wyniku:
+# sda   120G  disk   /        <-- Twój główny SSD
+# sdb   240G  disk            <-- NOWY SSD (backup)
+
+
+# --------------------------------
+# 2. DODATKOWE SPRAWDZENIE MODELÓW
+# --------------------------------
+# Żeby upewnić się, który dysk jest który:
+
+sudo lsblk -o NAME,SIZE,MODEL
+
+# Lub pełna lista:
+sudo fdisk -l
+
+
+# --------------------------------
+# 3. PRZYGOTOWANIE NOWEGO SSD (jeśli czysty)
+# --------------------------------
+# Tworzenie nowej partycji:
+
+sudo fdisk /dev/sdb
+
+# W środku:
+#   n  -> new partition
+#   p  -> primary
+#   1  -> numer
+#   Enter -> cały dysk
+#   w  -> zapisz i wyjdź
+
+# Formatowanie EXT4:
+sudo mkfs.ext4 /dev/sdb1
+
+
+# --------------------------------
+# 4. MONTOWANIE NOWEGO SSD
+# --------------------------------
+
+sudo mkdir -p /mnt/backup
+sudo mount /dev/sdb1 /mnt/backup
+
+# Sprawdzenie:
+df -h
+
+
+# --------------------------------
+# 5. BACKUP CAŁEGO SYSTEMU (klon 1:1)
+# --------------------------------
+# UWAGA: /dev/sda = Twój główny SSD
+#        /dev/sdb = Nowy SSD (backup)
+
+sudo dd if=/dev/sda of=/dev/sdb bs=64M status=progress
+
+# Po zakończeniu masz pełną kopię systemu.
+
+
+# --------------------------------
+# 6. BACKUP TYLKO PROJEKTÓW (bez klonowania)
+# --------------------------------
+
+sudo rsync -av /binance-bot /mnt/backup/
+sudo rsync -av /etc/systemd/system/binance_bot.service /mnt/backup/
+sudo rsync -av /home/karol /mnt/backup/
+
+# To jest szybki backup najważniejszych danych.
+
+
+# --------------------------------
+# 7. AUTOMATYCZNY BACKUP (opcjonalnie)
+# --------------------------------
+# Edycja crona:
+
+sudo crontab -e
+
+# Dodaj np. codziennie o 3:00:
+
+0 3 * * * rsync -av /binance-bot /mnt/backup/
+
+
+# --------------------------------
+# 8. ODMONTOWANIE DYSKU BACKUP
+# --------------------------------
+
+sudo umount /mnt/backup
+
+
+# --------------------------------
+# 9. SPRAWDZENIE, CZY WSZYSTKO OK
+# --------------------------------
+
+lsblk
+df -h
+sudo journalctl -xe   # jeśli coś poszło nie tak
+
+
+# ================================================
+# KONIEC PROCEDURY
+# ================================================

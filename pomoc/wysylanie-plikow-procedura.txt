@@ -1,0 +1,112 @@
+# ============================================================
+#   PROCEDURA WYSYŁANIA NOWYCH PLIKÓW DO binance_bot
+#   (PUTTY / Cmder / WinSCP / SFTP)
+#   Orange Pi / Linux / Armbian
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. WYBÓR METODY WYSYŁANIA PLIKÓW
+# ------------------------------------------------------------
+# Możesz użyć dowolnej z metod:
+#
+#   • WinSCP / FileZilla / Total Commander (SFTP)
+#   • Cmder → scp
+#   • Putty → scp (pscp.exe)
+#
+# Wszystkie działają tak samo — wysyłają pliki do /binance-bot.
+
+
+# ------------------------------------------------------------
+# 2. WYSŁANIE PLIKU PRZEZ Cmder (scp)
+# ------------------------------------------------------------
+
+# Wysyłanie jednego pliku:
+scp main.py karol@opi3-bot:/binance-bot/
+
+# Wysyłanie całego folderu:
+scp -r binance-bot/ karol@opi3-bot:/binance-bot/
+
+
+# ------------------------------------------------------------
+# 3. WYSŁANIE PLIKU PRZEZ WinSCP / FileZilla (SFTP)
+# ------------------------------------------------------------
+# 1. Połącz się:
+#    Host: opi3-bot
+#    User: karol
+#    Protokoł: SFTP
+#
+# 2. Przejdź do katalogu:
+#    /binance-bot
+#
+# 3. Przeciągnij i upuść plik (np. main.py)
+#
+# 4. Nadpisz plik → TAK
+
+
+# ------------------------------------------------------------
+# 4. SPRAWDZENIE, CZY PLIK SIĘ PODMIENIŁ (opcjonalnie)
+# ------------------------------------------------------------
+
+ls -l /binance-bot
+
+
+# ------------------------------------------------------------
+# 5. RESTART USŁUGI SYSTEMD (najważniejsze)
+# ------------------------------------------------------------
+# Po podmianie plików bot MUSI zostać zrestartowany,
+# aby zaczął działać z nową wersją kodu.
+
+sudo systemctl restart binance_bot.service
+
+
+# ------------------------------------------------------------
+# 6. PODGLĄD LOGÓW, ABY UPEWNIĆ SIĘ, ŻE BOT DZIAŁA
+# ------------------------------------------------------------
+
+sudo journalctl -u binance_bot.service -f
+
+# Jeśli widzisz sygnały EMA lub logi startowe — działa OK.
+
+
+# ------------------------------------------------------------
+# 7. JEŚLI ZMIENIŁEŚ ZALEŻNOŚCI (requirements.txt)
+# ------------------------------------------------------------
+
+cd /binance-bot
+venv/bin/python -m pip install -r requirements.txt
+sudo systemctl restart binance_bot.service
+
+
+# ------------------------------------------------------------
+# 8. JEŚLI ZMIENIŁEŚ PLIK .service
+# ------------------------------------------------------------
+
+sudo systemctl daemon-reload
+sudo systemctl restart binance_bot.service
+
+
+# ------------------------------------------------------------
+# 9. SZYBKIE SPRAWDZENIE STATUSU
+# ------------------------------------------------------------
+
+systemctl status binance_bot.service
+
+
+# ============================================================
+#   PODSUMOWANIE:
+#
+#   • Nieważne, czy wysyłasz przez Cmder, Putty, WinSCP — działa tak samo.
+#   • Po podmianie plików → restart usługi = NOWA WERSJA DZIAŁA.
+#   • Jeśli zmienisz zależności → pip install + restart.
+#   • Jeśli zmienisz plik .service → daemon-reload + restart.
+#
+#   Najczęściej używane:
+#       sudo systemctl restart binance_bot.service
+#       sudo journalctl -u binance_bot.service -f
+# ============================================================
+Jeśli chcesz, mogę przygotować:
+automatyczny deploy z laptopa jednym poleceniem
+deploy z GitHuba (push → bot aktualizuje się sam)
+wersję PRO z numerami buildów i logowaniem wersji
+Powiedz tylko, czy chcesz to rozwinąć.

@@ -1,0 +1,78 @@
+# ============================================================
+#   TWORZENIE WŁASNEGO BOTA TELEGRAM (BotFather)
+#   Token + nazwa + konfiguracja
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. OTWÓRZ BotFather
+# ------------------------------------------------------------
+# W Telegramie:
+#   • kliknij lupę (szukaj)
+#   • wpisz: BotFather
+#   • wybierz ten z ikoną "Ojca chrzestnego"
+#   • kliknij START
+
+
+# ------------------------------------------------------------
+# 2. UTWÓRZ NOWEGO BOTA
+# ------------------------------------------------------------
+# Wpisz do BotFather:
+
+/newbot
+
+# BotFather zapyta o:
+#   • nazwę bota (wyświetlana nazwa)
+#   • username bota (musi kończyć się na: _bot)
+
+# Przykład:
+#   Nazwa: Binance Alert Bot
+#   Username: binance_alert_karol_bot
+
+
+# ------------------------------------------------------------
+# 3. ODBIERZ TOKEN (najważniejsze)
+# ------------------------------------------------------------
+# BotFather wyświetli coś takiego:
+
+#   "Done! Congratulations on your new bot.
+#    Use this token to access the HTTP API:
+#    1234567890:ABCdefGhijkLMNOPqrsTUVwxyz123456789"
+
+# TOKEN = klucz do wysyłania wiadomości z Twojego bota.
+
+# ZAPISZ TOKEN — będzie potrzebny w Pythonie.
+
+
+# ------------------------------------------------------------
+# 4. AKTYWUJ BOTA
+# ------------------------------------------------------------
+# Kliknij link, który BotFather podał:
+#   t.me/nazwa_twojego_bota
+
+# Otworzy się okno bota → kliknij START.
+
+# Teraz bot jest aktywny i gotowy do odbierania wiadomości.
+
+
+# ------------------------------------------------------------
+# 5. SPRAWDZENIE, CZY BOT DZIAŁA
+# ------------------------------------------------------------
+# Napisz do swojego bota:
+#   test
+
+# Jeśli nie odpowiada — to normalne.
+# Odpowiadać będzie dopiero po podłączeniu do Twojego programu.
+
+
+# ============================================================
+#   PODSUMOWANIE:
+#
+#   ✔ BotFather uruchomiony
+#   ✔ Nowy bot utworzony
+#   ✔ Token API zapisany
+#   ✔ Bot aktywowany (START)
+#
+#   Następny krok:
+#       3. Pobranie chat_id (gdzie bot ma wysyłać alerty)
+# ============================================================
