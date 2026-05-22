@@ -4,16 +4,19 @@ import time
 from datetime import datetime
 from binance_api import BinanceAPI
 from strategy_loader import load_strategy
-from telegram_alerts import send_buy_alert, send_sell_alert
+from telegram_alerts import (
+    send_buy_alert,
+    send_sell_alert,
+    send_near_cross_alert
+)
 
 # WYBÓR STRATEGII
-# STRATEGY_NAME = "ema15"
-STRATEGY_NAME = "ema7_25"
-
+STRATEGY_NAME = "ema7_25_pro"
 
 # WYBÓR KRYPTOWALUTY
 symbol = "XRPUSDC"
 
+# Załaduj strategię
 check_signal = load_strategy(STRATEGY_NAME)
 api = BinanceAPI()
 
@@ -52,7 +55,8 @@ while True:
 
         print(f"🕒 Nowa świeca zamknięta | Cena: {current_price}")
 
-        signal = check_signal(prices)
+        # Strategia zwraca: (signal, diff)
+        signal, diff = check_signal(prices)
 
         # Ignoruj pierwszy sygnał po starcie
         if first_run:
@@ -63,6 +67,7 @@ while True:
 
         # Wysyłaj sygnał tylko gdy się zmieni
         if signal != last_signal:
+
             if signal == "BUY":
                 print(f"🟢 BUY | {symbol} | {current_price}")
                 send_buy_alert(symbol, current_price)
@@ -71,7 +76,12 @@ while True:
                 print(f"🔴 SELL | {symbol} | {current_price}")
                 send_sell_alert(symbol, current_price)
 
+            elif signal == "NEAR_CROSS":
+                print(f"⚠️ BLISKO PRZECIĘCIA | różnica: {diff:.5f}")
+                send_near_cross_alert(symbol, diff)
+            
             last_signal = signal
+
         else:
             print(f"⏳ Brak nowego sygnału | {symbol} | {current_price}")
 
