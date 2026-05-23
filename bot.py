@@ -1,17 +1,17 @@
-# main.py
-
+# bot.py
 import time
 from datetime import datetime
-from binance_api import BinanceAPI
-from strategy_loader import load_strategy
-from telegram_alerts import (
+
+from api import BinanceAPI
+from strategy import load_strategy
+from alert import (
     send_buy_alert,
     send_sell_alert,
     send_near_cross_alert
 )
 
 # WYBÓR STRATEGII
-STRATEGY_NAME = "ema7_25_pro"
+STRATEGY_NAME = "scalp"
 
 # WYBÓR KRYPTOWALUTY
 symbol = "XRPUSDC"
@@ -40,7 +40,7 @@ while True:
             continue
 
         # Pobierz timestamp ostatniej świecy
-        klines = api.get_klines(symbol, interval="1m", limit=2)
+        klines = api.get_klines(symbol, interval="1m", limit=200)
         candle_close_time = klines[-1][6]  # closeTime
 
         # Jeśli świeca jeszcze się nie zamknęła → czekamy

@@ -22,7 +22,7 @@
 # ------------------------------------------------------------
 
 # Wysyłanie jednego pliku:
-scp main.py karol@opi3-bot:/binance-bot/
+scp bot.py karol@opi3-bot:/binance-bot/
 
 # Wysyłanie całego folderu:
 scp -r binance-bot/ karol@opi3-bot:/binance-bot/
@@ -39,7 +39,7 @@ scp -r binance-bot/ karol@opi3-bot:/binance-bot/
 # 2. Przejdź do katalogu:
 #    /binance-bot
 #
-# 3. Przeciągnij i upuść plik (np. main.py)
+# 3. Przeciągnij i upuść plik (np. bot.py)
 #
 # 4. Nadpisz plik → TAK
 

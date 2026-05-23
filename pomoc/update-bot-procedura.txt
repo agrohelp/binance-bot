@@ -10,7 +10,7 @@
 # ------------------------------------------------------------
 # Z laptopa wysyłasz zmieniony plik do katalogu projektu:
 
-scp main.py karol@opi3-bot:/binance-bot/
+scp bot.py karol@opi3-bot:/binance-bot/
 
 # Lub cały folder projektu:
 scp -r binance-bot/ karol@opi3-bot:/binance-bot/

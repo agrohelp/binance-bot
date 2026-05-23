@@ -1,4 +1,4 @@
-# strategy_loader.py
+# strategy.py
 
 import importlib
 
@@ -7,7 +7,7 @@ def load_strategy(name: str):
     Dynamicznie ładuje strategię z katalogu strategies/.
     name: np. 'ema15', 'ema30', 'ema7_25', 'rsi'
     """
-    module_name = f"strategies.strategy_{name}"
+    module_name = f"strategies.{name}"
 
     try:
         module = importlib.import_module(module_name)

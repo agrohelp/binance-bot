@@ -22,11 +22,11 @@ git remote add origin https://github.com/agrohelp/binance-bot.git
 - sprawdz czy remote (zdalny) działa 
 remote -v
 
--git branch → operacje na gałęziach -M → move/rename z wymuszeniem -main → nowa nazwa gałęzi
-git branch -M main
+-git branch → operacje na gałęziach -M → move/rename z wymuszeniem -bot → nowa nazwa gałęzi
+git branch -M bot
 
 -wyslij do GitHub
-git push -u origin main
+git push -u origin bot
 
 --Pierwszy commit po zmianach
 git add .
@@ -41,15 +41,20 @@ git status
 git add .
 -2) Zrób commit
 git commit -m "Kod dostosowany do klucza 'tylko odczyt'"
+
 3) Wyślij zmiany na GitHub
-git push
+git push lub
+git push origin master lub
+
+git tag v1.0-stable
+git push origin v1.0-stable
 
 -- commit historia opis data i godzina commita
 git log
-git log --oneline  - ostatni
+git log --oneline  - wyswietla wszystkie commity i ich ID
 git log --oneline --graph
 git log -n 5   - ostatnie 5
-git log -- main.py  - dla jednego pliku
+git log -- bot.py  - dla jednego pliku
 git log --author="Karol"   - autora
 git log --grep="read-only"   - zawierajace słowo
 git log -p   - pokazuje zmiany - bardzo obszerny nie stosuj

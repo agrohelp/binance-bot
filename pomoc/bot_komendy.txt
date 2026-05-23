@@ -2,6 +2,11 @@
 #  PODSTAWOWE KOMENDY DO BOTA
 #  Usługa: binance_bot.service
 # ===============================
+# Zawsze po zmianie nazwy pliku lub katalogów:
+sudo systemctl daemon-reload
+sudo systemctl restart binance_bot.service
+sudo journalctl -u binance_bot.service -f
+---
 
 # ▶️ 1. Uruchomienie bota
 sudo systemctl start binance_bot.service
@@ -38,7 +43,7 @@ sudo systemctl disable binance_bot.service
 # ===============================
 
 # ▶️ Ręczne uruchomienie bota bez systemd (debug)
-venv/bin/python main.py
+venv/bin/python bot.py
 
 # ▶️ Sprawdzenie, czy venv działa
 which python

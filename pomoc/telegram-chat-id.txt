@@ -68,5 +68,5 @@ https://api.telegram.org/botTOKEN/getUpdates
 #   ✔ Jesteś gotowy na integrację z Pythonem
 #
 #   Następny krok:
-#       4. Moduł telegram_alerts.py (wysyłanie alertów)
+#       4. Moduł alert.py (wysyłanie alertów)
 # ============================================================

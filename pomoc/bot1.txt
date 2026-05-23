@@ -1,10 +1,10 @@
 --Test1
 python  - uruchom REPL i dopiero komendy
-from binance_api import BinanceAPI
+from api import BinanceAPI
 api = BinanceAPI()
 print(api.get_price("XRPUSDC"))
 -wynik
->>> from binance_api import BinanceAPI
+>>> from api import BinanceAPI
 >>> api = BinanceAPI()
 >>> print(api.get_price("XRPUSDC"))
 {'symbol': 'XRPUSDC', 'price': '1.41370000'}

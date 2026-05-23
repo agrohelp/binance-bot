@@ -1,4 +1,4 @@
-# binance_api.py
+# api.py
 
 import requests
 
@@ -20,7 +20,7 @@ class BinanceAPI:
 
         return float(data["price"])
 
-    def get_prices(self, symbol, limit=100):
+    def get_prices(self, symbol, limit=200):
         """
         Pobiera listę ostatnich cen zamknięcia (close) z Binance.
         limit = ile świec pobrać (max 1000)
@@ -38,7 +38,7 @@ class BinanceAPI:
         closes = [float(candle[4]) for candle in data]
         return closes
 
-    def get_klines(self, symbol, interval="1m", limit=2):
+    def get_klines(self, symbol, interval="1m", limit=200):
         """
         Pobiera pełne dane świec (OHLC + timestampy).
         """

@@ -1,10 +1,12 @@
-# telegram_alerts.py
-
+# alert.py
+# Ten moduł obsługuje wysyłanie alertów do Telegrama.
 import requests
-from telegram_config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
-
-BOT_TOKEN = TELEGRAM_BOT_TOKEN
-CHAT_ID = TELEGRAM_CHAT_ID
+import os
+# Używamy python-dotenv do ładowania zmiennych środowiskowych z pliku .env
+from dotenv import load_dotenv
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = int(os.getenv("CHAT_ID"))
 
 last_message_id = None
 

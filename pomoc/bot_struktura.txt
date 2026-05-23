@@ -1,0 +1,11 @@
+api.py
+alert.py
+bot.py
+strategy.py
+strategies/
+    scalp.py
+    (medium.py – dodamy później)
+config.py
+.env
+requirements.txt
+venv/
