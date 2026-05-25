@@ -1,6 +1,12 @@
 import requests
 import os
 from dotenv import load_dotenv
+from settings import (
+    scalp_symbol,
+    scalp_interval,
+    scalp_ema1,
+    scalp_ema2,
+)
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -8,42 +14,103 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_IDS = os.getenv("CHAT_IDS", "")
 CHAT_IDS = [int(x.strip()) for x in CHAT_IDS.split(",") if x.strip().isdigit()]
 
-last_messages = {}
+# Oddzielne pamięci wiadomości
+last_trade_alert = {}   # BUY / SELL / BLISKO
+last_test_alert = {}    # TEST ALERT
 
 
-def send_message(text):
-    global last_messages
+def send_trade_message(text: str, chat_id: int):
+    """BUY/SELL/BLISKO — kasują tylko swoje poprzednie alerty."""
+    if chat_id in last_trade_alert:
+        try:
+            requests.get(
+                f"https://api.telegram.org/bot{BOT_TOKEN}/deleteMessage",
+                params={"chat_id": chat_id, "message_id": last_trade_alert[chat_id]},
+                timeout=5,
+            )
+        except:
+            pass
 
-    if not BOT_TOKEN or not CHAT_IDS:
-        print("❌ Telegram: brak BOT_TOKEN lub CHAT_IDS")
-        return
+    r = requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        params={"chat_id": chat_id, "text": text},
+        timeout=5,
+    )
+
+    data = r.json()
+    if "result" in data:
+        last_trade_alert[chat_id] = data["result"]["message_id"]
+
+
+def send_test_message(text: str, chat_id: int):
+    """TEST ALERT — kasuje tylko poprzedni TEST ALERT."""
+    if chat_id in last_test_alert:
+        try:
+            requests.get(
+                f"https://api.telegram.org/bot{BOT_TOKEN}/deleteMessage",
+                params={"chat_id": chat_id, "message_id": last_test_alert[chat_id]},
+                timeout=5,
+            )
+        except:
+            pass
+
+    r = requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        params={"chat_id": chat_id, "text": text},
+        timeout=5,
+    )
+
+    data = r.json()
+    if "result" in data:
+        last_test_alert[chat_id] = data["result"]["message_id"]
+
+
+# ============================
+# ALERTY TRADINGOWE
+# ============================
+
+def send_buy_alert(symbol, price, diff=None):
+    text = f"📈 BUY — przecięcie EMA\n{symbol} | Cena: {price}"
+    for chat_id in CHAT_IDS:
+        send_trade_message(text, chat_id)
+
+
+def send_sell_alert(symbol, price, diff=None):
+    text = f"📉 SELL — przecięcie EMA\n{symbol} | Cena: {price}"
+    for chat_id in CHAT_IDS:
+        send_trade_message(text, chat_id)
+
+
+def send_blisko_alert(symbol, price, diff, direction: str):
+    if direction == "UP":
+        text = f"ℹ️ Zbliżenie do BUY (nie sygnał)\n{symbol} | Cena: {price}"
+    else:
+        text = f"ℹ️ Zbliżenie do SELL (nie sygnał)\n{symbol} | Cena: {price}"
 
     for chat_id in CHAT_IDS:
-
-        if chat_id in last_messages:
-            try:
-                requests.get(
-                    f"https://api.telegram.org/bot{BOT_TOKEN}/deleteMessage",
-                    params={"chat_id": chat_id, "message_id": last_messages[chat_id]},
-                    timeout=5
-                )
-            except:
-                pass
-
-        r = requests.get(
-            f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-            params={"chat_id": chat_id, "text": text},
-            timeout=5
-        )
-
-        data = r.json()
-        if "result" in data:
-            last_messages[chat_id] = data["result"]["message_id"]
+        send_trade_message(text, chat_id)
 
 
-def send_buy_alert(symbol, price):
-    send_message(f"🟢 BUY | {symbol} | {price}")
+# ============================
+# ALERT TESTOWY
+# ============================
 
+def send_test_alert(data: dict):
+    text = (
+        "🧪 TEST ALERT — analiza EMA\n"
+        f"{scalp_symbol} | {scalp_interval}\n\n"
+        f"EMA{scalp_ema1}: {data['e1']:.6f}\n"
+        f"EMA{scalp_ema2}: {data['e2']:.6f}\n"
+        f"Diff: {data['diff']:.6f}\n"
+        f"Diff prev: {data['diff_prev']:.6f}\n"
+        f"Blisko: {data['blisko']}\n"
+        f"Sygnał: {data['signal']}"
+    )
 
-def send_sell_alert(symbol, price):
-    send_message(f"🔴 SELL | {symbol} | {price}")
+    # # Wysyłamy TEST ALERT do wszystkich chatów, ale nie kasujemy alertów tradingowych
+    # for chat_id in CHAT_IDS:
+    #     send_test_message(text, chat_id)
+    
+    # TEST ALERT tylko dla pierwszej osoby (developer)
+    if CHAT_IDS:
+        send_test_message(text, CHAT_IDS[0])
