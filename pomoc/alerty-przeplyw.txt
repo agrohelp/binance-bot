@@ -1,0 +1,108 @@
+┌──────────────────────────────────────────────┐
+│                 settings.py                  │
+│----------------------------------------------│
+│  • scalp_symbol                               │
+│  • scalp_interval                             │
+│  • scalp_candles                              │
+│  • scalp_ema1 / scalp_ema2                    │
+│  • delta                                      │
+│  • ALERT_TEST_ENABLED                         │
+└───────────────────────────────┬──────────────┘
+                                │ import
+                                ▼
+┌──────────────────────────────────────────────┐
+│                    bot.py                    │
+│----------------------------------------------│
+│ 1) Pobierz prices + klines                   │
+│ 2) Sprawdź czy świeca się zamknęła           │
+│      ├─ NIE → czekaj                         │
+│      └─ TAK → analiza                        │
+│                                              │
+│ 3) Wywołaj strategię:                        │
+│      signal, dif, extra = check_signal()    │
+│                                              │
+│ 4) TEST ALERT (zawsze)                       │
+│      jeśli ALERT_TEST_ENABLED → send_test    │
+│                                              │
+│ 5) Pierwsza świeca → ignoruj sygnały         │
+│                                              │
+│ 6) Jeśli sygnał się zmienił:                 │
+│      ├─ KUP → send_buy_alert                 │
+│      ├─ SPRZ → send_sell_alert               │
+│      ├─ BLISKO_KUP → send_blisko_alert        │
+│      └─ BLISKO_SPRZ → send_blisko_alert      │
+│                                              │
+│ 7) last_signal = signal                      │
+└───────────────────────────────┬──────────────┘
+                                │ wywołuje
+                                ▼
+┌──────────────────────────────────────────────┐
+│                   scalp.py                   │
+│----------------------------------------------│
+│ 1) Liczy EMA7 i EMA25                        │
+│ 2) Pobiera e1p / e2p                 │
+│ 3) Pobiera e1 / e2                           │
+│ 4) Liczy difp i dif                    │
+│ 5) Wykrywa:                                   │
+│      ├─ KUP (przecięcie ↑)                   │
+│      ├─ SPRZ (przecięcie ↓)                  │
+│      ├─ BLISKO_KUP                            │
+│      ├─ BLISKO_SPRZ                          │
+│      └─ None                                 │
+│ 6) Zwraca: signal, dif, extra_data          │
+└───────────────────────────────┬──────────────┘
+                                │ wywołuje
+                                ▼
+┌──────────────────────────────────────────────┐
+│                   alert.py                   │
+│----------------------------------------------│
+│  • send_buy_alert()                          │
+│  • send_sell_alert()                         │
+│  • send_blisko_alert()                       │
+│  • send_test_alert()                         │
+│                                              │
+│ Wszystkie → send_message() → Telegram        │
+└───────────────────────────────┬──────────────┘
+                                │ wysyła
+                                ▼
+┌──────────────────────────────────────────────┐
+│                   TELEGRAM                   │
+│----------------------------------------------│
+│  Odbiera alerty KUP / SPRZ / BLISKO / TEST   │
+└──────────────────────────────────────────────┘
+
+🟩 CO TEN FLOWCHART POKAZUJE?
+✔ settings.py
+Tylko przechowuje ustawienia.
+
+✔ bot.py
+To centrum dowodzenia:
+pobiera świeczki
+czeka na zamknięcie świecy
+wywołuje scalp.py
+wysyła alerty
+
+✔ scalp.py
+To silnik strategii:
+liczy EMA
+wykrywa przecięcia
+zwraca sygnał + dane
+
+✔ alert.py
+To warstwa komunikacji:
+wysyła alerty do Telegrama
+===========================================
+
+Możemy też zrobić ASCII‑art dla:
+
+przepływu danych EMA,
+
+logiki BLISKO,
+
+logiki KUP/SPRZ,
+
+architektury całego projektu (api → bot → strategy → alert → telegram),
+
+albo nawet mini‑dashboard ASCII do logów.
+
+Powiedz tylko, co chcesz zobaczyć dalej.

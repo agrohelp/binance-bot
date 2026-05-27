@@ -1,0 +1,147 @@
+🟩 PLAN ROZWOJU BOTA — ETAPY 1 → 7
+Każdy etap jest logiczny, rośnie w trudności i buduje na poprzednim.
+Nie przeskakujesz — idziesz jak po schodach.
+
+ETAP 1 — Stabilność i fundamenty (to już masz)
+✔ Pobieranie świec
+✔ Liczenie EMA
+✔ Alerty Telegram
+✔ System sygnałów BUY/SELL/BLISKO
+✔ Debug
+✔ Architektura modułów
+Cel: bot działa 24/7, nie crashuje, nie gubi danych.
+
+Status: ZROBIONE.
+
+ETAP 2 — Dodanie RSI i MACD (logika sygnałów PRO)
+Tu zaczyna się prawdziwa strategia.
+
+Dodajesz:
+RSI (filtr ekstremów)
+
+MACD (momentum)
+
+EMA50/200 (trend)
+
+Logika:
+EMA → trend
+
+MACD → trigger
+
+RSI → filtr
+
+Efekt: sygnały są 10× czystsze niż sama EMA.
+
+ETAP 3 — ATR (zmienność + SL/TP)
+To jest absolutny game‑changer.
+
+Dodajesz:
+ATR (14)
+
+SL = ATR × 1.5
+
+TP = ATR × 2.5
+
+Po co?
+SL nie jest za ciasny
+
+TP nie jest za daleki
+
+bot nie wchodzi, gdy rynek śpi
+
+bot nie wchodzi, gdy rynek jest zbyt dziki
+
+Efekt: strategia staje się REALNA.
+
+ETAP 4 — Multi‑interwał (4H + 1H)
+To jest profesjonalny standard.
+
+Trend:
+EMA50/200 na 1D
+
+Wejścia:
+EMA20/50 + MACD + RSI na 4H
+
+Precyzja:
+ATR + potwierdzenie na 1H
+
+Efekt: bot nie łapie szumu, tylko prawdziwe ruchy.
+
+ETAP 5 — Zarządzanie pozycją
+Dodajesz:
+
+✔ Trailing stop
+✔ Break-even
+✔ Re‑entry logic
+✔ Max liczba pozycji
+✔ Max ryzyko na trade
+Efekt: bot przestaje być „sygnałowym”, a staje się „tradingowym”.
+
+ETAP 6 — Logi, statystyki, analiza wyników
+Dodajesz:
+
+✔ zapisywanie sygnałów do pliku
+✔ zapisywanie wyników
+✔ analiza winrate
+✔ analiza RR
+✔ analiza drawdown
+Efekt: możesz ocenić, czy strategia działa.
+
+ETAP 7 — Optymalizacja i automatyzacja
+✔ optymalizacja parametrów (EMA, RSI, MACD, ATR)
+✔ testy na różnych symbolach
+✔ testy na różnych interwałach
+✔ automatyczne alerty o błędach
+✔ watchdog procesów
+Efekt: bot staje się stabilnym systemem, który można rozwijać latami.
+
+🟦 Jak to wygląda w czasie?
+Tydzień 1–2
+EMA → RSI → MACD
+
+pierwsza prawdziwa strategia
+
+Tydzień 3
+ATR + SL/TP
+
+pierwsze testy LIVE
+
+Tydzień 4
+multi‑interwał
+
+trailing stop
+
+break-even
+
+Tydzień 5–6
+statystyki
+
+optymalizacja
+
+stabilizacja
+
+🟩 Dlaczego ten plan jest idealny dla Ciebie?
+Bo:
+
+masz już fundament
+
+masz środowisko 24/7
+
+masz alerty
+
+masz debug
+
+masz architekturę modułów
+
+masz doświadczenie z SBC
+
+masz projekt, który można rozwijać
+
+Teraz tylko dokładamy kolejne warstwy.
+
+🟦 Chcesz, żebym przygotował:
+A) gotową strukturę folderów pod cały plan
+B) gotowy moduł strategii EMA+RSI+MACD
+C) gotowy moduł ATR (SL/TP)
+D) gotowy system multi‑interwałowy
+E) pełny kod bota PRO

@@ -1,13 +1,15 @@
 # ============================================
-# SCALP (v1.3 z min_diff)
+# SCALP (v1.3 z min_dif)
 # ============================================
 
 scalp_symbol = "XRPUSDC"
-scalp_interval = "1m"
+scalp_interval = "30m"
 scalp_candles = 200
 
 scalp_ema1 = 7
 scalp_ema2 = 25
 
 # Minimalna różnica między EMA, żeby uznać przecięcie
-min_diff = 0.0000001
+delta = 0.0005
+# bot testowy wlacz/wylacz
+ALERT_TEST_ENABLED = True

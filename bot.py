@@ -1,8 +1,13 @@
 import time
 from api import BinanceAPI
 from strategies.strategy import load_strategy
-from alert import send_buy_alert, send_sell_alert
-from settings import scalp_symbol, scalp_interval, scalp_candles
+from alert import (
+    send_buy_alert,
+    send_sell_alert,
+    send_blisko_alert,
+    send_test_alert
+)
+from settings import scalp_symbol, scalp_interval, scalp_candles, ALERT_TEST_ENABLED
 
 STRATEGY_NAME = "scalp"
 symbol = scalp_symbol
@@ -16,53 +21,77 @@ print(f"💰 Symbol: {symbol}")
 print("────────────────────────────────────────────")
 
 first_run = True
-last_signal = None
 last_candle_time = None
+last_signal = None
+
 
 while True:
     try:
-        prices = api.get_prices(symbol, limit=scalp_candles)
+        # Pobranie cen
+        prices = api.get_prices(symbol, scalp_interval, limit=scalp_candles)
 
         if not prices or len(prices) < 20:
             print("[WARN] Za mało danych. Czekam...")
             time.sleep(2)
             continue
 
+        # Pobranie świec
         klines = api.get_klines(symbol, interval=scalp_interval, limit=scalp_candles)
         candle_close_time = klines[-1][6]
 
+        # Czekamy na zamknięcie świecy
         if candle_close_time == last_candle_time:
-            print(f"⏳ Czekam na zamknięcie świecy | {symbol}")
-            time.sleep(2)
+            print(f"⏳ Czekam na zamknięcie świecy - pauza 120s | {symbol}")
+            time.sleep(120)
             continue
 
+        # Nowa świeca
         last_candle_time = candle_close_time
-        current_price = prices[-1]
+        price = prices[-1]
 
-        print(f"🕒 Nowa świeca zamknięta | Cena: {current_price}")
+        # Analiza strategii
+        signal, dif, extra = check_signal(prices)
 
-        signal, diff, _ = check_signal(prices)
+        print(f"🕒 Nowa świeca zamknięta | Cena: {price}")
+        print(f"📊 Sygnał: {signal} | Diff: {dif:.8f}")
 
+        # Pierwsza świeca — ignorujemy sygnały tradingowe
         if first_run:
             print("⏳ Ignoruję pierwszy sygnał (start bota)")
             first_run = False
             last_signal = signal
+
+            # TEST ALERT po 1 sekundzie
+            if ALERT_TEST_ENABLED:
+                time.sleep(1)
+                send_test_alert(extra)
+
             continue
 
-        if signal != last_signal:
+        # ALERTY TRADINGOWE — wysyłane jako pierwsze
+        if signal != last_signal:# nie powtarzamy tego samego sygnału
 
             if signal == "BUY":
-                print(f"🟢 BUY | {symbol} | {current_price}")
-                send_buy_alert(symbol, current_price)
+                send_buy_alert(symbol, price, dif)
 
             elif signal == "SELL":
-                print(f"🔴 SELL | {symbol} | {current_price}")
-                send_sell_alert(symbol, current_price)
+                send_sell_alert(symbol, price, dif)
+
+            elif signal == "BLISKO_UP":# blisko przecięcia BUY
+                send_blisko_alert(symbol, price, dif, "UP")
+
+            elif signal == "BLISKO_DOWN":
+                send_blisko_alert(symbol, price, dif, "DOWN")
 
             last_signal = signal
 
         else:
-            print(f"⏳ Brak nowego sygnału | {symbol} | {current_price}")
+            print(f"⏳ Brak nowego sygnału | {symbol} | {price}")
+
+        # TEST ALERT — wysyłany ZAWSZE z opoznieniem po 1 sekundzie
+        if ALERT_TEST_ENABLED:
+            time.sleep(1)
+            send_test_alert(extra)
 
         time.sleep(1)
 

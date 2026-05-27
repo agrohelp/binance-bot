@@ -5,7 +5,9 @@
 # Zawsze po zmianie nazwy pliku lub katalogów:
 sudo systemctl daemon-reload
 sudo systemctl restart binance_bot.service
-sudo journalctl -u binance_bot.service -f
+sudo journalctl -u binance_bot.service -f  dane i data systemu
+sudo journalctl -u binance_bot.service -f -o cat  - dane bez daty systemu OK
+
 ---
 
 # ▶️ 1. Uruchomienie bota

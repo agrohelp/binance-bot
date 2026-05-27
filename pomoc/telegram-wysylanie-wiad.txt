@@ -1,0 +1,237 @@
+Wysylanie wiadomości do Telegrama
+
+python
+for chat_id in CHAT_IDS:
+CHAT_IDS – lista ID czatów (np. Twoje konto, grupa, kanał).
+
+Pętla leci po każdym chat_id i dla każdego robi to samo: usuwa stary alert → wysyła nowy.
+
+python
+    # Usuń poprzedni alert
+    if chat_id in last_messages:
+        try:
+            requests.get(
+                f"https://api.telegram.org/bot{BOT_TOKEN}/deleteMessage",
+                params={"chat_id": chat_id, "message_id": last_messages[chat_id]},
+                timeout=5
+            )
+        except:
+            pass
+Idea: w każdym czacie ma być tylko jeden aktualny alert.
+Jeśli wcześniej coś wysłałeś, to:
+
+last_messages – słownik:
+
+klucz: chat_id
+
+wartość: message_id ostatniego alertu w tym czacie.
+
+if chat_id in last_messages: – tylko jeśli mamy zapamiętany poprzedni alert dla tego czatu.
+
+deleteMessage – API Telegrama usuwa konkretną wiadomość:
+
+chat_id – gdzie
+
+message_id – którą (z last_messages[chat_id])
+
+try/except: pass – jak się nie uda (np. wiadomość już usunięta, błąd sieci), to ignorujemy błąd, nie przerywamy działania.
+
+Efekt: przed wysłaniem nowego alertu próbujesz posprzątać stary.
+
+python
+    # Wyślij nowy alert
+    r = requests.get(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        params={"chat_id": chat_id, "text": text},
+        timeout=5
+    )
+sendMessage – klasyczne wysłanie wiadomości przez Telegram Bot API.
+
+BOT_TOKEN – token Twojego bota.
+
+chat_id – gdzie wysłać.
+
+text – treść alertu (np. „KUP XRPUSDC @ 1.3472”).
+
+timeout=5 – maksymalnie 5 sekund czekania na odpowiedź.
+
+Zmienna r to odpowiedź HTTP (obiekt Response z requests).
+
+python
+    data = r.json()
+    if "result" in data:
+        last_messages[chat_id] = data["result"]["message_id"]
+r.json() – parsujesz odpowiedź z Telegrama do dict-a.
+
+Standardowa odpowiedź Telegrama wygląda tak:
+
+json
+{
+  "ok": true,
+  "result": {
+    "message_id": 123,
+    "chat": {...},
+    "date": ...,
+    "text": "..."
+  }
+}
+if "result" in data: – upewniasz się, że odpowiedź jest poprawna.
+
+last_messages[chat_id] = data["result"]["message_id"] – zapisujesz ID nowo wysłanej wiadomości jako „ostatni alert” dla tego czatu.
+
+Efekt: przy następnym alercie będziesz mógł usunąć właśnie tę wiadomość.
+
+Co ten kod robi „strategicznie”?
+Dla każdego czatu w CHAT_IDS:
+
+Jeśli jest zapamiętany poprzedni alert → spróbuj go usunąć.
+
+Wyślij nowy alert.
+
+Zapamiętaj message_id nowego alertu w last_messages.
+
+Czyli:
+
+W każdym czacie zawsze istnieje maksymalnie jeden aktualny alert.
+Nowy alert zastępuje poprzedni (poprzedni jest usuwany).
+
+To jest idealne pod „ostatni stan sygnału” – np. aktualny KUP/SPRZ/WAIT, bez śmietnika starych alertów.
+
+Jeśli chcesz, mogę Ci dorobić wersję z:
+
+inline przyciskami,
+
+formatowaniem (Markdown),
+
+rozróżnieniem typów alertów (KUP/SPRZ/BLISKO) w tekście.
+
+🟩 Jak to działa w praktyce — prosto i technicznie
+1. Telegram nadaje unikalny message_id każdej wiadomości
+Gdy wysyłasz:
+
+python
+sendMessage
+Telegram odpowiada JSON‑em:
+
+json
+{
+  "ok": true,
+  "result": {
+    "message_id": 123,
+    ...
+  }
+}
+Ten numer:
+
+Kod
+message_id = 123
+jest unikalny w danym czacie.
+
+🟩 2. Twój bot zapisuje ten message_id
+W tej linii:
+
+python
+last_messages[chat_id] = data["result"]["message_id"]
+bot zapamiętuje:
+
+dla którego czatu (chat_id)
+
+jaki był ostatni alert (message_id)
+
+Czyli masz coś takiego:
+
+Kod
+last_messages = {
+    123456789: 55,
+    -100987654321: 102,
+}
+🟩 3. Przy kolejnym alercie bot usuwa poprzedni
+Dzięki temu:
+
+python
+requests.get(
+    f"https://api.telegram.org/bot{BOT_TOKEN}/deleteMessage",
+    params={"chat_id": chat_id, "message_id": last_messages[chat_id]},
+)
+bot usuwa dokładnie tę jedną wiadomość, którą wcześniej wysłał.
+
+🟩 4. Efekt końcowy
+W każdym czacie:
+
+zawsze jest tylko jeden alert
+
+nowy alert zastępuje poprzedni
+
+czat jest czysty, bez spamu
+
+użytkownik widzi tylko aktualny sygnał KUP/SPRZ/BLISKO
+
+To jest profesjonalne zachowanie bota tradingowego.
+
+🟩 TAK — po resecie bot traci message_id i NIE usuwa poprzedniego alertu
+Dlaczego?
+
+Bo:
+
+Kod
+last_messages = {}
+jest trzymane w RAM.
+
+A RAM znika po:
+
+restarcie bota,
+
+restarcie Orange Pi,
+
+restarcie procesu systemd,
+
+błędzie, który ubije proces,
+
+manualnym killu.
+
+Po starcie bot zaczyna z pustym słownikiem:
+
+Kod
+last_messages = {}
+Więc:
+
+nie ma zapamiętanego message_id,
+
+nie wie, którą wiadomość usunąć,
+
+więc nie usuwa niczego,
+
+i wysyła nowy alert jako nową wiadomość.
+
+To jest normalne i poprawne.
+
+🟩 Co to oznacza w praktyce?
+🔹 1. Po restarcie bota stare alerty zostają w Telegramie
+Bo bot nie ma ich ID → nie może ich usunąć.
+
+🔹 2. Pierwszy alert po restarcie zawsze będzie nową wiadomością
+Bo nie ma czego usuwać.
+
+🔹 3. Dopiero kolejne alerty będą nadpisywać poprzednie
+Bo bot zapisze:
+
+Kod
+last_messages[chat_id] = message_id
+i od tego momentu będzie usuwać poprzedni alert.
+
+🟩 Czy to jest problem?
+Nie.
+To jest normalne zachowanie każdego bota, który trzyma stan w RAM.
+
+Ale jeśli chcesz, mogę zrobić wersję:
+
+🟦 A) która zapisuje last_messages do pliku JSON
+→ po restarcie bot pamięta ostatni alert
+
+🟦 B) która usuwa WSZYSTKIE wiadomości bota w czacie po starcie
+→ czysty czat po każdym restarcie
+
+🟦 C) która zamiast usuwać — edytuje jedną wiadomość
+→ zawsze tylko jeden alert, nawet po restarcie
+
+Opcja C jest najbardziej profesjonalna.

@@ -1,0 +1,45 @@
+binance-bot/
+│
+├── bot.py
+├── alert.py
+├── api.py
+├── settings.py
+├── config.py
+├── .env
+│
+├── core/
+│   ├── datafeed.py
+│   ├── executor.py
+│   ├── position.py
+│   └── logger.py
+│
+├── indicators/
+│   ├── ema.py
+│   ├── rsi.py
+│   ├── macd.py
+│   └── atr.py
+│
+├── strategy/
+│   ├── base.py
+│   ├── ema_rsi_macd.py
+│   └── risk_atr.py
+│
+├── logs/
+│   └── trades.csv
+│
+├── strategies/   ← zostawimy jako archiwum
+├── testy/
+└── venv/
+===========================
+To jest architektura profesjonalnego bota, gotowa na:
+EMA
+RSI
+MACD
+ATR
+multi‑interwał
+SL/TP
+trailing stop
+re‑entry
+statystyki
+optymalizację
+====================

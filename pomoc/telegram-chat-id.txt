@@ -1,6 +1,6 @@
 # ============================================================
 #   POBRANIE chat_id DLA TWOJEGO BOTA TELEGRAM
-#   (potrzebne, aby bot wysyłał alerty BUY/SELL)
+#   (potrzebne, aby bot wysyłał alerty KUP/SPRZ)
 # ============================================================
 
 
