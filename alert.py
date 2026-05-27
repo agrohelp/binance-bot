@@ -110,7 +110,6 @@ def send_test_alert(data: dict):
     # # Wysyłamy TEST ALERT do wszystkich chatów, ale nie kasujemy alertów tradingowych
     # for chat_id in CHAT_IDS:
     #     send_test_message(text, chat_id)
-
     # TEST ALERT tylko dla pierwszej osoby (developer)
     if CHAT_IDS:
         send_test_message(text, CHAT_IDS[0])

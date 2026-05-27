@@ -50,10 +50,17 @@ while True:
         price = prices[-1]
 
         # Analiza strategii
+<<<<<<< HEAD
         signal, dif, extra = check_signal(prices)
 
         print(f"🕒 Nowa świeca zamknięta | Cena: {price}")
         print(f"📊 Sygnał: {signal} | Diff: {dif:.8f}")
+=======
+        signal, diff, extra = check_signal(prices)
+
+        print(f"🕒 Nowa świeca zamknięta | Cena: {price}")
+        print(f"📊 Sygnał: {signal} | Diff: {diff:.8f}")
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
 
         # Pierwsza świeca — ignorujemy sygnały tradingowe
         if first_run:
@@ -69,6 +76,7 @@ while True:
             continue
 
         # ALERTY TRADINGOWE — wysyłane jako pierwsze
+<<<<<<< HEAD
         if signal != last_signal:# nie powtarzamy tego samego sygnału
 
             if signal == "BUY":
@@ -82,13 +90,32 @@ while True:
 
             elif signal == "BLISKO_DOWN":
                 send_blisko_alert(symbol, price, dif, "DOWN")
+=======
+        if signal != last_signal:
+
+            if signal == "BUY":
+                send_buy_alert(symbol, price, diff)
+
+            elif signal == "SELL":
+                send_sell_alert(symbol, price, diff)
+
+            elif signal == "BLISKO_UP":
+                send_blisko_alert(symbol, price, diff, "UP")
+
+            elif signal == "BLISKO_DOWN":
+                send_blisko_alert(symbol, price, diff, "DOWN")
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
 
             last_signal = signal
 
         else:
             print(f"⏳ Brak nowego sygnału | {symbol} | {price}")
 
+<<<<<<< HEAD
         # TEST ALERT — wysyłany ZAWSZE z opoznieniem po 1 sekundzie
+=======
+        # TEST ALERT — wysyłany ZAWSZE po 1 sekundzie
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
         if ALERT_TEST_ENABLED:
             time.sleep(1)
             send_test_alert(extra)

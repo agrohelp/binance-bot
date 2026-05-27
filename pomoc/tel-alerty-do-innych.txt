@@ -11,9 +11,15 @@ Masz 3 możliwe scenariusze — wybierz ten, który pasuje.
 🟦 1. Jeśli alerty mają iść na prywatny czat (DM)
 Użytkownik musi:
 
+<<<<<<< HEAD
 ✔ 1. Otworzyć link do Twojego bota:
 Kod
  https://t.me/BinanceAlertBot
+=======
+✔ 1. Otworzyć link do Twojego bota
+Kod
+https://t.me/NazwaTwojegoBota
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
 ✔ 2. Kliknąć „Start”
 To jest konieczne, bo Telegram NIE pozwala botowi pisać do kogoś, kto nie kliknął Start.
 

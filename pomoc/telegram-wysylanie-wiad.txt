@@ -164,7 +164,11 @@ nowy alert zastępuje poprzedni
 
 czat jest czysty, bez spamu
 
+<<<<<<< HEAD
 użytkownik widzi tylko aktualny sygnał KUP/SPRZ/BLISKO
+=======
+użytkownik widzi tylko aktualny sygnał BUY/SELL/BLISKO
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
 
 To jest profesjonalne zachowanie bota tradingowego.
 
@@ -220,7 +224,11 @@ last_messages[chat_id] = message_id
 i od tego momentu będzie usuwać poprzedni alert.
 
 🟩 Czy to jest problem?
+<<<<<<< HEAD
 Nie.
+=======
+Nie.
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
 To jest normalne zachowanie każdego bota, który trzyma stan w RAM.
 
 Ale jeśli chcesz, mogę zrobić wersję:
@@ -234,4 +242,8 @@ Ale jeśli chcesz, mogę zrobić wersję:
 🟦 C) która zamiast usuwać — edytuje jedną wiadomość
 → zawsze tylko jeden alert, nawet po restarcie
 
+<<<<<<< HEAD
 Opcja C jest najbardziej profesjonalna.
+=======
+Opcja C jest najbardziej profesjonalna.
+>>>>>>> 04f7b5dc41fe421298e2f0de6708f0d783b78e6b
